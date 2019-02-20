@@ -3,6 +3,7 @@ import json
 import os
 import requests
 import datetime
+import statistics
 from dotenv import load_dotenv
 from pandas import DataFrame
 
@@ -71,8 +72,8 @@ if stockTicker.isalpha() and len(stockTicker) <= 4:
         for date in days:
             timeStamps.append(date)
             opens.append(tsd[date]["1. open"])
-            highs.append(tsd[date]["2. high"])
-            lows.append(tsd[date]["3. low"])
+            highs.append(float(tsd[date]["2. high"]))
+            lows.append(float(tsd[date]["3. low"]))
             closes.append(tsd[date]["4. close"])
             volumes.append(tsd[date]["5. volume"])
 
@@ -89,8 +90,8 @@ if stockTicker.isalpha() and len(stockTicker) <= 4:
 
         #Help with dataframes: https://datatofish.com/export-dataframe-to-csv/
         #Also help from: https://github.com/hiepnguyen034/robo-stock/blob/master/robo_advisor.py#L29-L44
-        df = DataFrame(Stocks)
-        #print (df)
+        #df = DataFrame(Stocks)
+        print (df)
         csv_file_path = os.path.join(os.path.dirname(__file__), "data", "Prices_" + stockTicker)
         #export_csv = df.to_csv(csv_file_path, header=True)
 
@@ -112,6 +113,20 @@ if stockTicker.isalpha() and len(stockTicker) <= 4:
         newestDate = datetime.datetime.fromisoformat(days[0])
         print("Latest data from: " + str(newestDate.strftime("%B")) + " " + str(newestDate.day) + ", " + str(newestDate.year))
 
+        #latest closing price, its recent average high price, and its recent average low price, 
+
+
+        closingStock = tsd[days[0]]["4. close"]
+        closingStock_USD = "${0:,.2f}".format(float(closingStock))
+        print("The latest closing price is: " + closingStock_USD)
+
+        recentHigh = statistics.mean(highs)
+        recentHigh_USD = "${0:,.2f}".format(recentHigh)
+        print("The recent average high price is: " + recentHigh_USD)
+
+        recentLow = statistics.mean(lows)
+        recentLow_USD = "${0:,.2f}".format(recentLow)
+        print("The recent average high price is: " + recentLow_USD)
         
     except requests.exceptions.ConnectionError:
         print("Sorry we can't find any trading data for that stock symbol.")
