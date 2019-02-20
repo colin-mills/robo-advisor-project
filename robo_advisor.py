@@ -103,16 +103,13 @@ if stockTicker.isalpha() and len(stockTicker) <= 4:
 
         print("Stock Selected: " + stockTicker)
 
+        #DateTime help from: https://docs.python.org/3/library/datetime.html
         timeRun = datetime.datetime.now()
-        print("Run at : " + str(timeRun.time()) + " on " + str(timeRun.strftime("%B")) + " " + str(timeRun.day) + ", " + str(timeRun.year))
-
-        #Run at: 11:52pm on June 5th, 2018")
-        #now().strftime("%Y-%m-%d %H:%M"))
+        print("Run at : " + str(timeRun.hour) + ":" + str(timeRun.minute) + " on " + str(timeRun.strftime("%B")) + " " + str(timeRun.day) + ", " + str(timeRun.year))
 
 
         #Gets date into readable datetime format
         newestDate = datetime.datetime.fromisoformat(days[0])
-
         print("Latest data from: " + str(newestDate.strftime("%B")) + " " + str(newestDate.day) + ", " + str(newestDate.year))
 
         
