@@ -2,6 +2,7 @@
 import json
 import os
 import requests
+import datetime
 from dotenv import load_dotenv
 from pandas import DataFrame
 
@@ -61,7 +62,6 @@ if stockTicker.isalpha() and len(stockTicker) <= 4:
         print("CRUNCHING THE DATA...")
 
         timeStamps = []
-
         opens = []
         highs = []
         lows = []
@@ -69,13 +69,13 @@ if stockTicker.isalpha() and len(stockTicker) <= 4:
         volumes = []
 
         for date in days:
-            timeStamps.append(str(date))
+            timeStamps.append(date)
             opens.append(tsd[date]["1. open"])
             highs.append(tsd[date]["2. high"])
             lows.append(tsd[date]["3. low"])
             closes.append(tsd[date]["4. close"])
             volumes.append(tsd[date]["5. volume"])
-           
+
 
         Stocks = {
                 'timestamp': timeStamps,
@@ -86,14 +86,36 @@ if stockTicker.isalpha() and len(stockTicker) <= 4:
                 'volume': volumes
                 }
 
-        df = DataFrame(Stocks, columns= ['timestamps', 'open','high','low','close','volume'])
 
-        #export_csv = df.to_csv (r"robo_advisor\data\prices_{}.csv".format(stockTicker), index = None, header=True) #Don't forget to add '.csv' at the end of the path
+        #Help with dataframes: https://datatofish.com/export-dataframe-to-csv/
+        #Also help from: https://github.com/hiepnguyen034/robo-stock/blob/master/robo_advisor.py#L29-L44
+        df = DataFrame(Stocks)
+        #print (df)
+        csv_file_path = os.path.join(os.path.dirname(__file__), "data", "Prices_" + stockTicker)
+        #export_csv = df.to_csv(csv_file_path, header=True)
 
-        print (df)
+        print("Data stored succesfully!")
+        print("\n\nProccesing Data...")
+        
+        #####################
+        ##Stock information##
+        #####################
 
-        print("-----------------------")
-        print("LATEST CLOSING PRICE: $1,259.19")
+        print("Stock Selected: " + stockTicker)
+
+        timeRun = datetime.datetime.now()
+        print("Run at : " + str(timeRun.time()) + " on " + str(timeRun.strftime("%B")) + " " + str(timeRun.day) + ", " + str(timeRun.year))
+
+        #Run at: 11:52pm on June 5th, 2018")
+        #now().strftime("%Y-%m-%d %H:%M"))
+
+
+        #Gets date into readable datetime format
+        newestDate = datetime.datetime.fromisoformat(days[0])
+
+        print("Latest data from: " + str(newestDate.strftime("%B")) + " " + str(newestDate.day) + ", " + str(newestDate.year))
+
+        
     except requests.exceptions.ConnectionError:
         print("Sorry we can't find any trading data for that stock symbol.")
 else:
