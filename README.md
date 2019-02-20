@@ -1,5 +1,5 @@
 # ROBO-Advisor-project
-Second class project concerning reading CSV files and outputting relevant information
+Third in class project dealing with API's
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ pip install requests
 ```
 ## Usage
 
-Execute the "robo-advisor" program:
+Execute the "robo_advisor" program:
 
 ```sh
-python robo-advisor.py
+python robo_advisor.py
