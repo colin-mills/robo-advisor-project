@@ -32,8 +32,7 @@ pip install python-dotenv
 ```
 ALPHAVANTAGE_API_KEY=*Your Key*
 ```
-3.
-Execute the "robo_advisor" program:
+3. Execute the "robo_advisor" program:
 ```
 python robo_advisor.py
 ```
