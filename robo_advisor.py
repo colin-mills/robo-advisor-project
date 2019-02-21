@@ -6,6 +6,7 @@ import datetime
 import statistics
 from dotenv import load_dotenv
 from pandas import DataFrame
+import matplotlib.pyplot as plt
 
 #################################
 ##Get secret API code from .env##
@@ -126,7 +127,7 @@ for stockTicker in stockList:
             #recent avaerage low
             recentLow = statistics.mean(lows)
             recentLow_USD = "${0:,.2f}".format(recentLow)
-            print("The recent average high price is: ".ljust(35) + recentLow_USD)
+            print("The recent average low price is: ".ljust(35) + recentLow_USD)
             print(dashes)
             difference = recentHigh - recentLow
             averageStockPrice = (recentHigh + recentLow)/2
@@ -139,7 +140,25 @@ for stockTicker in stockList:
             else:
                 print("You should not buy this stock because it is not very volatile nor is it at a relative low.\n\n")
 
+            char = input("Press enter when you are ready to view a graph of the stock value over time.")
+
+            dayPlot = []
+            x = 0
+
+            for number in highs:
+                x = x+1
+                dayPlot.append(x)
+
+            plt.plot(dayPlot, highs)
+            plt.plot(dayPlot, lows)
+            plt.title("Graph of " + stockTicker + " High and Low Values over the past 100 days")
+            plt.ylabel("Sales in USD ($)")
+            plt.xlabel("Days")
+            plt.show()
+
         except requests.exceptions.ConnectionError:
+            print("Sorry we can't find any trading data for that stock symbol.")
+        except KeyError:
             print("Sorry we can't find any trading data for that stock symbol.")
     else:
         print("Sorry this doesn't seem like an existing stock ticker. \nPlease ensure that your choice only contains letters and is less than four characters.")

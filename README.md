@@ -7,14 +7,33 @@ Third in class project dealing with API's
 
 ## Instalation 
 
-First instal the package using Pip, if nescesary
+First install these package using Pip, if nescesary
 
-```sh
+```
 pip install requests
+```
+
+```
+pip install matplotlib
+```
+
+```
+pip install pandas
+```
+
+```
+pip install python-dotenv
 ```
 ## Usage
 
-Execute the "robo_advisor" program:
+1. Request an API key from https://www.alphavantage.co/
 
-```sh
+2. create a .env file in this project storing your API key as such
+```
+ALPHAVANTAGE_API_KEY=*Your Key*
+```
+3.
+Execute the "robo_advisor" program:
+```
 python robo_advisor.py
+```
