@@ -161,13 +161,14 @@ for stockTicker in stockList:
         ###################################
         ##Implemennting Matplotlib Graphs##
         ###################################
+
         char = input("Press enter when you are ready to view a graph of the stock value over time.")
         dayPlot = []
-        x = 0
+        x = len(highs)
 
         for number in highs:
-            x = x+1
             dayPlot.append(x)
+            x = x-1
 
         plt.plot(dayPlot, highs)
         plt.plot(dayPlot, lows)
