@@ -30,7 +30,7 @@ pip install python-dotenv
 
 2. create a .env file in this project storing your API key as such
 ```
-ALPHAVANTAGE_API_KEY= **Your Key**
+ALPHAVANTAGE_API_KEY= __Your Key__
 ```
 3. Execute the "robo_advisor" program:
 ```
