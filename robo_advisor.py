@@ -151,8 +151,8 @@ for stockTicker in stockList:
 
             plt.plot(dayPlot, highs)
             plt.plot(dayPlot, lows)
-            plt.title("Graph of " + stockTicker + " High and Low Values over the past 100 days")
-            plt.ylabel("Sales in USD ($)")
+            plt.title("Graph of " + stockTicker + " High and Low values over the past 100 days")
+            plt.ylabel("Values in USD ($)")
             plt.xlabel("Days")
             plt.show()
 
