@@ -20,14 +20,14 @@ stockList = []
 Continue = ""
 
 #Get stock Ticker from user
-while Continue != 'n' and Continue != 'N':
+while Continue != 'DONE' and Continue != 'done':
     Ticker = input("Which stock would you like to get information on? ")
     stockList.append(Ticker)
-    Continue = input("More stocks to input? (y/n): ")
+    Continue = input("More stocks to input? If not please enter \"DONE\": ")
 
 for stockTicker in stockList:
     #validates for irregular inputs of stock tickers
-    if stockTicker.isalpha() and len(stockTicker) <= 4:
+    if stockTicker.isalpha() and len(stockTicker) <= 5:
         request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&apikey={}".format(stockTicker, API_KEY)
         print(request_url)
 
