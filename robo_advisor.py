@@ -18,18 +18,26 @@ API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 
 stockList = []
 Continue = ""
+Ticker = ""
 nextStock = 1
+firstMessage = False
 
 #Get stock Ticker from user
-while Continue != 'DONE' and Continue != 'done':
-    Ticker = input("Please enter the stock sticker you would you like to get information on. (Eg. \"AMZN\" \"AAPL\" \"GOOG\") ")
+while Ticker != 'DONE' and Ticker != 'done':
+    Ticker = input("Please enter the stock sticker you would you like to get information on. (Eg. \"AMZN\" \"AAPL\" \"GOOG\"): ")
+    Ticker = Ticker.upper()
     #validates for irregular inputs of stock tickers
-    if Ticker.isalpha() and len(Ticker) <= 5:
+    if Ticker == "DONE" and Ticker == "done":
+        ##Do nothing
+        print("Fetching data from the internet")
+    elif Ticker.isalpha() and len(Ticker) <= 5:
         stockList.append(Ticker)
     else:
         print("Sorry " +  Ticker + " doesn't seem like an existing stock ticker. \nPlease ensure that your choice only contains letters and is five or less characters.")
     
-    Continue = input("More stocks to input? If not please enter \"DONE\": ")
+    if not firstMessage:
+        print("If you have more stocks to input please continue to enter them one at a time, otherwise input \"DONE\" ")
+        firstMessage = True
 
 for stockTicker in stockList:
     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&apikey={}".format(stockTicker, API_KEY)
@@ -148,7 +156,7 @@ for stockTicker in stockList:
 
         print("Evaluating stock purchase decision...")
 
-        riskLevel = input("How much risk are you willing to take on in an investment?\n enter \"HIGH\", \"MED\", or \"LOW\"\n")
+        riskLevel = input("How much risk are you willing to take on in an investment?\n enter \"HIGH\", \"MED\", or \"LOW\": ")
         
         if riskLevel == "HIGH":
             risk = .3
@@ -171,25 +179,31 @@ for stockTicker in stockList:
         ##Implemennting Matplotlib Graphs##
         ###################################
 
-        char = input("Press press enter when you are ready to view a graph of the stock value over time.")
-        dayPlot = []
-        x = len(highs)
+        graphDecision = input("If you would like to see a graph of this stock value over time please enter \"YES\" Otherwise, press enter: ")
+            
+        if graphDecision == "YES":
+            dayPlot = []
+            x = len(highs)
 
-        for number in highs:
-            dayPlot.append(x)
-            x = x-1
+            for number in highs:
+                dayPlot.append(x)
+                x = x-1
 
-        plt.plot(dayPlot, highs)
-        plt.plot(dayPlot, lows)
-        plt.title("Graph of " + stockTicker + " High and Low values over the past 100 days")
-        plt.ylabel("Values in USD ($)")
-        plt.xlabel("Days")
-        plt.show()
+            plt.plot(dayPlot, highs)
+            plt.plot(dayPlot, lows)
+            plt.title("Graph of " + stockTicker + " High and Low values over the past 100 days")
+            plt.ylabel("Values in USD ($)")
+            plt.xlabel("Days")
+            plt.show()
 
         nextStock = nextStock + 1
 
-       # if nextStock <= len(stockList)
-       #     char = input("Please close out of graph and press enter once more to view stock information on " + stockList[nextStock])
+        if nextStock <= len(stockList) and graphDecision == "YES":
+            Continue = input("Please close out of graph and press enter to view stock information on " + stockList[nextStock])
+        elif nextStock <= len(stockList):
+            Continue = input("Press enter to view stock information on " + stockList[nextStock])
+
+            breakpoint()
 
     except requests.exceptions.ConnectionError:
         print("Sorry we can't find any trading data for " + stockTicker + ".")
