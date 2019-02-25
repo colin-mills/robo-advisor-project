@@ -16,6 +16,7 @@ load_dotenv() #> loads contents of the .env file into the script's environment
 API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 #print(API_KEY)
 
+dashes = "--------------------------------------------"
 stockList = []
 Continue = ""
 Ticker = ""
@@ -30,7 +31,7 @@ while Ticker != 'DONE':
     #validates for irregular inputs of stock tickers
     if Ticker == "DONE":
         ##Do nothing
-        print("Fetching data from the internet")
+        print("Fetching data from the internet...")
     elif Ticker.isalpha() and len(Ticker) <= 5:
         stockList.append(Ticker)
     else:
@@ -47,6 +48,7 @@ for stockTicker in stockList:
     #Try block for invalid call
     try:
         #requests the info at the URL
+        print(dashes)
         response = requests.get(request_url)
         print("RESPONSE STATUS: " + str(response.status_code))
 
@@ -63,7 +65,6 @@ for stockTicker in stockList:
         ###################################
         ##Starts the informational output##
         ###################################
-        dashes = "--------------------------------------------"
         print(dashes)
         print("STOCK SYMBOL: " + stockTicker)
 
@@ -185,7 +186,8 @@ for stockTicker in stockList:
         ###################################
 
         graphDecision = input("If you would like to see a graph of this stock value over time please enter \"YES\" Otherwise, press enter: ")
-            
+        graphDecision = graphDecision.upper()
+
         if graphDecision == "YES":
             dayPlot = []
             x = len(highs)
@@ -197,16 +199,18 @@ for stockTicker in stockList:
             plt.plot(dayPlot, highs)
             plt.plot(dayPlot, lows)
             plt.title("Graph of " + stockTicker + " High and Low values over the past 100 days")
-            plt.ylabel("Values in USD ($)")
+            plt.ylabel("Stock Values in USD ($)")
             plt.xlabel("Days")
             plt.show()
 
         nextStock = nextStock + 1
 
         if nextStock < len(stockList) and graphDecision == "YES":
-            Continue = input("Please close out of graph and press enter to view stock information on " + stockList[nextStock])
+            Continue = input("Please close out of graph and press enter to view stock information on " + stockList[nextStock] + ": ")
         elif nextStock < len(stockList):
-            Continue = input("Press enter to view stock information on " + stockList[nextStock])
+            Continue = input("Press enter to view stock information on " + stockList[nextStock] + ": ")
+        else:
+            print("All stocks have been viewed.")
 
     except requests.exceptions.ConnectionError:
         print("Sorry we can't find any trading data for " + stockTicker + ".")
