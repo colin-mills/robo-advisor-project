@@ -19,15 +19,16 @@ API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 stockList = []
 Continue = ""
 Ticker = ""
-nextStock = 1
+nextStock = 0
 firstMessage = False
+riskLevelMessage = False
 
 #Get stock Ticker from user
-while Ticker != 'DONE' and Ticker != 'done':
+while Ticker != 'DONE': 
     Ticker = input("Please enter the stock sticker you would you like to get information on. (Eg. \"AMZN\" \"AAPL\" \"GOOG\"): ")
     Ticker = Ticker.upper()
     #validates for irregular inputs of stock tickers
-    if Ticker == "DONE" and Ticker == "done":
+    if Ticker == "DONE":
         ##Do nothing
         print("Fetching data from the internet")
     elif Ticker.isalpha() and len(Ticker) <= 5:
@@ -152,20 +153,24 @@ for stockTicker in stockList:
         averageStockPrice = (recentHigh + recentLow)/2
         percentDifference = difference / averageStockPrice
 
-        risk = .2
+        if riskLevelMessage == False:
+            risk = .2
+
+            riskLevel = input("How much risk are you willing to take on in an investment?\n enter \"HIGH\", \"MED\", or \"LOW\": ")
+            riskLevel = riskLevel.upper()
+            
+            if riskLevel == "HIGH":
+                risk = .3
+            elif riskLevel == "MED":
+                risk = .2
+            elif riskLevel == "LOW":
+                risk = .1
+            else:
+                print("Invalid input, reverting to default risk value of 20% volatility.") 
+            
+            riskLevelMessage = True
 
         print("Evaluating stock purchase decision...")
-
-        riskLevel = input("How much risk are you willing to take on in an investment?\n enter \"HIGH\", \"MED\", or \"LOW\": ")
-        
-        if riskLevel == "HIGH":
-            risk = .3
-        elif riskLevel == "MED":
-            risk = .2
-        elif riskLevel == "LOW":
-            risk = .1
-        else:
-            print("Invalid input, reverting to default risk value of 20% volatility.") 
 
         if percentDifference > risk and float(closingStock) < recentLow:
             print("\nYou should buy " + stockTicker + " because it has an above average volatility for you, with a below average closing price,\n Therefore this stock could have a big jump up.\n\n")
@@ -198,12 +203,10 @@ for stockTicker in stockList:
 
         nextStock = nextStock + 1
 
-        if nextStock <= len(stockList) and graphDecision == "YES":
+        if nextStock < len(stockList) and graphDecision == "YES":
             Continue = input("Please close out of graph and press enter to view stock information on " + stockList[nextStock])
-        elif nextStock <= len(stockList):
+        elif nextStock < len(stockList):
             Continue = input("Press enter to view stock information on " + stockList[nextStock])
-
-            breakpoint()
 
     except requests.exceptions.ConnectionError:
         print("Sorry we can't find any trading data for " + stockTicker + ".")
