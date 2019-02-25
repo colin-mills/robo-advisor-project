@@ -18,15 +18,17 @@ API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 
 stockList = []
 Continue = ""
+nextStock = 1
 
 #Get stock Ticker from user
 while Continue != 'DONE' and Continue != 'done':
-    Ticker = input("Which stock would you like to get information on? ")
+    Ticker = input("Please enter the stock sticker you would you like to get information on. (Eg. \"AMZN\" \"AAPL\" \"GOOG\") ")
     #validates for irregular inputs of stock tickers
     if Ticker.isalpha() and len(Ticker) <= 5:
         stockList.append(Ticker)
     else:
-        print("Sorry this doesn't seem like an existing stock ticker. \nPlease ensure that your choice only contains letters and is five or less characters.")
+        print("Sorry " +  Ticker + " doesn't seem like an existing stock ticker. \nPlease ensure that your choice only contains letters and is five or less characters.")
+    
     Continue = input("More stocks to input? If not please enter \"DONE\": ")
 
 for stockTicker in stockList:
@@ -126,11 +128,16 @@ for stockTicker in stockList:
         recentHigh_USD = "${0:,.2f}".format(recentHigh)
         print("The recent average high price is: ".ljust(35) + recentHigh_USD)
 
-        #recent avaerage low
+        #recent average low
         recentLow = statistics.mean(lows)
         recentLow_USD = "${0:,.2f}".format(recentLow)
         print("The recent average low price is: ".ljust(35) + recentLow_USD)
         print(dashes)
+
+        ###############################
+        ##Calculate purchase decision## 
+        ###############################
+
         maxValue = max(highs)
         minValue = min(lows)
         difference = maxValue - minValue
@@ -139,7 +146,9 @@ for stockTicker in stockList:
 
         risk = .2
 
-        riskLevel = input("How much risk are you willing to take on in an investment?\n HIGH, MED, LOW\n")
+        print("Evaluating stock purchase decision...")
+
+        riskLevel = input("How much risk are you willing to take on in an investment?\n enter \"HIGH\", \"MED\", or \"LOW\"\n")
         
         if riskLevel == "HIGH":
             risk = .3
@@ -148,21 +157,21 @@ for stockTicker in stockList:
         elif riskLevel == "LOW":
             risk = .1
         else:
-            print("Invalid input, reverting to default risk value of 20%") 
+            print("Invalid input, reverting to default risk value of 20% volatility.") 
 
         if percentDifference > risk and float(closingStock) < recentLow:
-            print("You should buy this stock because it has an above average volatility, with a below average closing price,\n Therefore this stock could have a big jump up.\n\n")
+            print("\nYou should buy " + stockTicker + " because it has an above average volatility for you, with a below average closing price,\n Therefore this stock could have a big jump up.\n\n")
         elif float(closingStock) < recentLow:
-            print("Although this stock is at a relative low, you should not buy it as it is not very volatile and, \n Therefore you will not earn much money.\n\n")
+            print("\nAlthough " + stockTicker + " is at a relative low, you should not buy it as it is not as volatile as you indicated you were willing to risk and, \n Therefore you will not earn as much money.\n\n")
         else:
-            print("You should not buy this stock because it is not very volatile nor is it at a relative low.\n\n")
+            print("\nYou should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n It is recomended that you purchase this stock when its price is at or below " + recentLow_USD + "\n\n")
 
 
         ###################################
         ##Implemennting Matplotlib Graphs##
         ###################################
 
-        char = input("Press enter when you are ready to view a graph of the stock value over time.")
+        char = input("Press press enter when you are ready to view a graph of the stock value over time.")
         dayPlot = []
         x = len(highs)
 
@@ -177,8 +186,13 @@ for stockTicker in stockList:
         plt.xlabel("Days")
         plt.show()
 
+        nextStock = nextStock + 1
+
+       # if nextStock <= len(stockList)
+       #     char = input("Please close out of graph and press enter once more to view stock information on " + stockList[nextStock])
+
     except requests.exceptions.ConnectionError:
-        print("Sorry we can't find any trading data for that stock symbol.")
+        print("Sorry we can't find any trading data for " + stockTicker + ".")
     except KeyError:
-        print("Sorry we can't find any trading data for that stock symbol.")
+        print("Sorry we can't find any trading data for " + stockTicker + ".")
 
