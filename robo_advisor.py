@@ -17,6 +17,7 @@ API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 #print(API_KEY)
 
 dashes = "--------------------------------------------"
+stars =  "*********************************************************************************"
 stockList = []
 Continue = ""
 Ticker = ""
@@ -107,8 +108,6 @@ for stockTicker in stockList:
         export_csv = df.to_csv(csv_file_path, header=True)
         
         print("Data stored succesfully!")
-        print(dashes)
-        print("\nProccesing Data...\n")
         
         #####################
         ##Stock information##
@@ -169,17 +168,20 @@ for stockTicker in stockList:
             else:
                 print("Invalid input, reverting to default risk value of 20% volatility.") 
             
+            print(dashes)
             riskLevelMessage = True
 
+
         print("Evaluating stock purchase decision...")
-
+        print("Recomendation: ")
         if percentDifference > risk and float(closingStock) < recentLow:
-            print("\nYou should buy " + stockTicker + " because it has an above average volatility for you, with a below average closing price,\n Therefore this stock could have a big jump up.\n\n")
+            print(" You should buy " + stockTicker + " because it has an above average volatility for you, with a below average closing price,\n Therefore this stock could have a big jump up.")
         elif float(closingStock) < recentLow:
-            print("\nAlthough " + stockTicker + " is at a relative low, you should not buy it as it is not as volatile as you indicated you were willing to risk and, \n Therefore you will not earn as much money.\n\n")
+            print(" Although " + stockTicker + " is at a relative low, you should not buy it as it is not as volatile as you indicated you were willing to risk and, \n Therefore you will not earn as much money.")
         else:
-            print("\nYou should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n It is recomended that you purchase this stock when its price is at or below " + recentLow_USD + "\n\n")
+            print(" You should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n It is recomended that you purchase this stock when its price is at or below " + recentLow_USD + ".")
 
+        print(dashes)
 
         ###################################
         ##Implemennting Matplotlib Graphs##
@@ -207,10 +209,14 @@ for stockTicker in stockList:
 
         if nextStock < len(stockList) and graphDecision == "YES":
             Continue = input("Please close out of graph and press enter to view stock information on " + stockList[nextStock] + ": ")
+            print(stars)
+            print(stars)
         elif nextStock < len(stockList):
             Continue = input("Press enter to view stock information on " + stockList[nextStock] + ": ")
+            print(stars)
+            print(stars)
         else:
-            print("All stocks have been viewed.")
+            print("\nAll stocks have been viewed.")
 
     except requests.exceptions.ConnectionError:
         print("Sorry we can't find any trading data for " + stockTicker + ".")
