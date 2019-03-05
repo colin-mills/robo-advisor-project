@@ -16,7 +16,8 @@ load_dotenv() #> loads contents of the .env file into the script's environment
 API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 #print(API_KEY)
 
-dashes = "--------------------------------------------"
+dashes = "---------------------------------------------"
+print(len(dashes))
 stars =  "************************************************************************************************"
 stockList = []
 Continue = ""
@@ -130,27 +131,26 @@ for stockTicker in stockList:
         #Closing stock price
         closingStock = tsd[days[0]]["4. close"]
         closingStock_USD = "${0:,.2f}".format(float(closingStock))
-        print("The latest closing price is: ".ljust(35) + closingStock_USD)
+        print("The latest closing price is: ".ljust(35) + closingStock_USD.rjust(10))
 
         #recent average high
-        recentHigh = statistics.mean(highs)
+        recentHigh = max(highs)
         recentHigh_USD = "${0:,.2f}".format(recentHigh)
-        print("The recent average high price is: ".ljust(35) + recentHigh_USD)
+        print("The recent high price is: ".ljust(35) + recentHigh_USD.rjust(10))
 
         #recent average low
-        recentLow = statistics.mean(lows)
+        recentLow = min(lows)
         recentLow_USD = "${0:,.2f}".format(recentLow)
-        print("The recent average low price is: ".ljust(35) + recentLow_USD)
+        print("The recent low price is: ".ljust(35) + recentLow_USD.rjust(10))
         print(dashes)
 
         ###############################
         ##Calculate purchase decision## 
         ###############################
-
-        maxValue = max(highs)
-        minValue = min(lows)
-        difference = maxValue - minValue
-        averageStockPrice = (recentHigh + recentLow)/2
+        difference = recentHigh - recentLow
+        averageHigh = statistics.mean(highs)
+        averageLow = statistics.mean(lows)
+        averageStockPrice = (averageHigh + averageLow)/2
         percentDifference = difference / averageStockPrice
 
         if riskLevelMessage == False:
@@ -179,7 +179,8 @@ for stockTicker in stockList:
         elif float(closingStock) < recentLow:
             print(" Although " + stockTicker + " is at a relative low, you should not buy it as it is not as volatile as you indicated you were willing to risk and, \n Therefore you will not earn as much money.")
         else:
-            print(" You should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n If you do purchase it is recomended that you wait until its price is at or below " + recentLow_USD + ".")
+            averageLow_USD = "${0:,.2f}".format(averageLow_USD)
+            print(" You should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n If you do purchase it is recomended that you wait until its price is at or below " + averageLow_USD + ".")
 
         print(dashes)
 
