@@ -187,7 +187,7 @@ for stockTicker in stockList:
         ##Implemennting Matplotlib Graphs##
         ###################################
 
-        graphDecision = input("If you would like to see a graph of this stock value over time please enter \"YES\" Otherwise, press enter: ")
+        graphDecision = input("If you would like to see a graph of this stock value over time please enter \"YES\" otherwise, press enter: ")
         graphDecision = graphDecision.upper()
 
         if graphDecision == "YES":
