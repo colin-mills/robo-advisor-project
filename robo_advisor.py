@@ -17,7 +17,6 @@ API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 #print(API_KEY)
 
 dashes = "---------------------------------------------"
-print(len(dashes))
 stars =  "************************************************************************************************"
 stockList = []
 Continue = ""
