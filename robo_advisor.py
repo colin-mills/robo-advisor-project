@@ -178,7 +178,7 @@ for stockTicker in stockList:
         elif float(closingStock) < recentLow:
             print(" Although " + stockTicker + " is at a relative low, you should not buy it as it is not as volatile as you indicated you were willing to risk and, \n Therefore you will not earn as much money.")
         else:
-            averageLow_USD = "${0:,.2f}".format(averageLow_USD)
+            averageLow_USD = "${0:,.2f}".format(averageLow)
             print(" You should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n If you do purchase it is recomended that you wait until its price is at or below " + averageLow_USD + ".")
 
         print(dashes)
