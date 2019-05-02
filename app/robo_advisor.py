@@ -1,6 +1,5 @@
 #robo_advisor.py
 import json
-import os
 import requests
 import datetime
 import statistics
@@ -8,7 +7,7 @@ from pandas import DataFrame
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from functions import to_USD, compile_URL
+from functions import to_USD, compile_URL, os
 
 #Variable definitions
 dashes = "---------------------------------------------"
