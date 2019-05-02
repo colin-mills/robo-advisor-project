@@ -4,21 +4,13 @@ import os
 import requests
 import datetime
 import statistics
-from dotenv import load_dotenv
 from pandas import DataFrame
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from functions import to_USD
+from functions import to_USD, compile_URL
 
-#################################
-##Get secret API code from .env##
-#################################
-
-load_dotenv() #> loads contents of the .env file into the script's environment
-API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
-#print(API_KEY)
-
+#Variable definitions
 dashes = "---------------------------------------------"
 stars =  "************************************************************************************************"
 stockList = []
@@ -46,8 +38,9 @@ while Ticker != 'DONE':
         firstMessage = True
 
 for stockTicker in stockList:
-    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&apikey={}".format(stockTicker, API_KEY)
-    print(request_url)
+    #request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&apikey={}".format(stockTicker, API_KEY)
+    #print(request_url)
+    request_url = compile_URL(stockTicker)
 
     #Try block for invalid call
     try:
