@@ -3,27 +3,19 @@ Third in class project dealing with API's
 
 ## Prerequisites
 
-**Requires Python 3.7.**
+* Requires Python 3.7.
+* pip
 
 ## Instalation 
 
-First install these package using Pip, if nescesary
+1. Clone or download this repository
+
+2. install needed package using Pip:
 
 ```
-pip install requests
+pip install -r requirements.txt
 ```
 
-```
-pip install matplotlib
-```
-
-```
-pip install pandas
-```
-
-```
-pip install python-dotenv
-```
 ## Usage
 
 1. Request an API key from https://www.alphavantage.co/
@@ -36,3 +28,11 @@ ALPHAVANTAGE_API_KEY= "Your Key"
 ```
 python robo_advisor.py
 ```
+## Testing
+
+run a test:
+
+```sh
+pytest
+```
+* For continous integration you need to go to the settings of your repository on Travis CI and input the API key 
