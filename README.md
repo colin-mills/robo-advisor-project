@@ -8,9 +8,9 @@ Third in class project dealing with API's
 
 ## Instalation 
 
-1. Clone or download this repository
+1. Clone or download this repository to your computer
 
-2. install needed package using Pip:
+2. install needed packages from within an environment once you have navigated to it on your command line:
 
 ```
 pip install -r requirements.txt
@@ -26,7 +26,7 @@ ALPHAVANTAGE_API_KEY= "Your Key"
 ```
 3. Execute the "robo_advisor" program:
 ```
-python robo_advisor.py
+python app/robo_advisor.py
 ```
 ## Testing
 
