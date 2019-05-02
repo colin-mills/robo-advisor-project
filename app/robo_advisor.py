@@ -1,21 +1,15 @@
 #robo_advisor.py
 import json
-import os
 import requests
 import datetime
 import statistics
-from dotenv import load_dotenv
 from pandas import DataFrame
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from functions import to_USD, compile_URL, os
 
-#################################
-##Get secret API code from .env##
-#################################
-
-load_dotenv() #> loads contents of the .env file into the script's environment
-API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
-#print(API_KEY)
-
+#Variable definitions
 dashes = "---------------------------------------------"
 stars =  "************************************************************************************************"
 stockList = []
@@ -43,8 +37,9 @@ while Ticker != 'DONE':
         firstMessage = True
 
 for stockTicker in stockList:
-    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&apikey={}".format(stockTicker, API_KEY)
-    print(request_url)
+    #request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&apikey={}".format(stockTicker, API_KEY)
+    #print(request_url)
+    request_url = compile_URL(stockTicker)
 
     #Try block for invalid call
     try:
@@ -104,7 +99,7 @@ for stockTicker in stockList:
         #Also help from: https://github.com/hiepnguyen034/robo-stock/blob/master/robo_advisor.py#L29-L44
         df = DataFrame(Stocks)
         #exports to CSV file in data
-        csv_file_path = os.path.join(os.path.dirname(__file__), "data", "Prices_" + stockTicker + ".csv")
+        csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "Prices_" + stockTicker + ".csv")
         export_csv = df.to_csv(csv_file_path, header=True)
         
         print("Data stored succesfully!")
@@ -129,18 +124,15 @@ for stockTicker in stockList:
 
         #Closing stock price
         closingStock = tsd[days[0]]["4. close"]
-        closingStock_USD = "${0:,.2f}".format(float(closingStock))
-        print("The latest closing price is: ".ljust(35) + closingStock_USD.rjust(10))
+        print("The latest closing price is: ".ljust(35) + to_USD(closingStock).rjust(10))
 
         #recent average high
         recentHigh = max(highs)
-        recentHigh_USD = "${0:,.2f}".format(recentHigh)
-        print("The recent high price is: ".ljust(35) + recentHigh_USD.rjust(10))
+        print("The recent high price is: ".ljust(35) + to_USD(recentHigh).rjust(10))
 
         #recent average low
         recentLow = min(lows)
-        recentLow_USD = "${0:,.2f}".format(recentLow)
-        print("The recent low price is: ".ljust(35) + recentLow_USD.rjust(10))
+        print("The recent low price is: ".ljust(35) + to_USD(recentLow).rjust(10))
         print(dashes)
 
         ###############################
@@ -178,8 +170,7 @@ for stockTicker in stockList:
         elif float(closingStock) < recentLow:
             print(" Although " + stockTicker + " is at a relative low, you should not buy it as it is not as volatile as you indicated you were willing to risk and, \n Therefore you will not earn as much money.")
         else:
-            averageLow_USD = "${0:,.2f}".format(averageLow)
-            print(" You should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n If you do purchase it is recomended that you wait until its price is at or below " + averageLow_USD + ".")
+            print(" You should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n If you do purchase it is recomended that you wait until its price is at or below " + to_USD(averageLow) + ".")
 
         print(dashes)
 
