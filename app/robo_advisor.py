@@ -6,6 +6,8 @@ import datetime
 import statistics
 from dotenv import load_dotenv
 from pandas import DataFrame
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 #################################
@@ -104,7 +106,7 @@ for stockTicker in stockList:
         #Also help from: https://github.com/hiepnguyen034/robo-stock/blob/master/robo_advisor.py#L29-L44
         df = DataFrame(Stocks)
         #exports to CSV file in data
-        csv_file_path = os.path.join(os.path.dirname(__file__), "data", "Prices_" + stockTicker + ".csv")
+        csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "Prices_" + stockTicker + ".csv")
         export_csv = df.to_csv(csv_file_path, header=True)
         
         print("Data stored succesfully!")
