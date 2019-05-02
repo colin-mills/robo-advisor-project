@@ -1,4 +1,4 @@
-from app.functions import to_USD, compile_URL, os, get_response
+from app.functions import to_USD, compile_URL, os, get_response, transform_response
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,3 +21,11 @@ def test_get_response():
      response = list(response)
      assert response[0] == "Meta Data"
      assert response[1] == "Time Series (Daily)"
+
+def test_transform_response():
+    testDict = {"first": 1, "second" : 2}
+    newList = transform_response(testDict)
+
+    assert type(newList) == list
+    assert newList[0] == "first"
+    assert newList[1] == "second"
