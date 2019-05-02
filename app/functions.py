@@ -19,6 +19,12 @@ def get_response(request_url):
     #issues request
     response = requests.get(request_url)
     #parses this data from json to dict
-    
+
     parsed_response = json.loads(response.text)
     return parsed_response
+
+def transform_response(tsd):
+    #Gets list of all keys in tsd (days) and converts to list
+    day_keys = tsd.keys() #> 'dict_keys' of all the day values
+    days = list(day_keys) #> 'list' of all the day values
+    return days

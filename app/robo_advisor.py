@@ -5,7 +5,7 @@ from pandas import DataFrame
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from functions import to_USD, compile_URL, os, requests, get_response
+from functions import to_USD, compile_URL, os, requests, get_response, transform_response
 
 #Variable definitions
 dashes = "---------------------------------------------"
@@ -40,13 +40,12 @@ for stockTicker in stockList:
     try: #Try block for invalid call
         ##requests and parses the info at the URL
         parsed_response = get_response(request_url)
-        
+
         #The Time Series (Daily) dict of the larger dict
         tsd = parsed_response["Time Series (Daily)"] #> 'dict'
 
-        #Gets list of all keys in tsd (days) and converts to list
-        day_keys = tsd.keys() #> 'dict_keys' of all the day values
-        days = list(day_keys) #> 'list' of all the day values
+        #converts dict into a list of the days
+        days = transform_response(tsd) #list(day_keys) #> 'list' of all the day values
 
         ###################################
         ##Starts the informational output##
@@ -58,6 +57,7 @@ for stockTicker in stockList:
         print("CRUNCHING THE DATA...")
         print(dashes)
 
+        #reassigns for each loop through if more than one
         timeStamps = []
         opens = []
         highs = []
