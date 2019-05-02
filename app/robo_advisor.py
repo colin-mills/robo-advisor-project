@@ -9,6 +9,7 @@ from pandas import DataFrame
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from functions import to_USD
 
 #################################
 ##Get secret API code from .env##
@@ -131,18 +132,15 @@ for stockTicker in stockList:
 
         #Closing stock price
         closingStock = tsd[days[0]]["4. close"]
-        closingStock_USD = "${0:,.2f}".format(float(closingStock))
-        print("The latest closing price is: ".ljust(35) + closingStock_USD.rjust(10))
+        print("The latest closing price is: ".ljust(35) + to_USD(closingStock).rjust(10))
 
         #recent average high
         recentHigh = max(highs)
-        recentHigh_USD = "${0:,.2f}".format(recentHigh)
-        print("The recent high price is: ".ljust(35) + recentHigh_USD.rjust(10))
+        print("The recent high price is: ".ljust(35) + to_USD(recentHigh).rjust(10))
 
         #recent average low
         recentLow = min(lows)
-        recentLow_USD = "${0:,.2f}".format(recentLow)
-        print("The recent low price is: ".ljust(35) + recentLow_USD.rjust(10))
+        print("The recent low price is: ".ljust(35) + to_USD(recentLow).rjust(10))
         print(dashes)
 
         ###############################
@@ -180,8 +178,7 @@ for stockTicker in stockList:
         elif float(closingStock) < recentLow:
             print(" Although " + stockTicker + " is at a relative low, you should not buy it as it is not as volatile as you indicated you were willing to risk and, \n Therefore you will not earn as much money.")
         else:
-            averageLow_USD = "${0:,.2f}".format(averageLow)
-            print(" You should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n If you do purchase it is recomended that you wait until its price is at or below " + averageLow_USD + ".")
+            print(" You should not buy " + stockTicker + " because it is not very volatile nor is it at a relative low. \n If you do purchase it is recomended that you wait until its price is at or below " + to_USD(averageLow) + ".")
 
         print(dashes)
 
