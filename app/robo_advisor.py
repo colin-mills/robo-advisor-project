@@ -1,13 +1,11 @@
 #robo_advisor.py
-import json
-import requests
 import datetime
 import statistics
 from pandas import DataFrame
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from functions import to_USD, compile_URL, os
+from functions import to_USD, compile_URL, os, requests, get_response, transform_response
 
 #Variable definitions
 dashes = "---------------------------------------------"
@@ -37,26 +35,17 @@ while Ticker != 'DONE':
         firstMessage = True
 
 for stockTicker in stockList:
-    #request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&apikey={}".format(stockTicker, API_KEY)
-    #print(request_url)
     request_url = compile_URL(stockTicker)
 
-    #Try block for invalid call
-    try:
-        #requests the info at the URL
-        print(dashes)
-        response = requests.get(request_url)
-        print("RESPONSE STATUS: " + str(response.status_code))
+    try: #Try block for invalid call
+        ##requests and parses the info at the URL
+        parsed_response = get_response(request_url)
 
-        #parses this data from json to dict
-        parsed_response = json.loads(response.text)
-        
         #The Time Series (Daily) dict of the larger dict
         tsd = parsed_response["Time Series (Daily)"] #> 'dict'
 
-        #Gets list of all keys in tsd (days) and converts to list
-        day_keys = tsd.keys() #> 'dict_keys' of all the day values
-        days = list(day_keys) #> 'list' of all the day values
+        #converts dict into a list of the days
+        days = transform_response(tsd) #list(day_keys) #> 'list' of all the day values
 
         ###################################
         ##Starts the informational output##
@@ -68,6 +57,7 @@ for stockTicker in stockList:
         print("CRUNCHING THE DATA...")
         print(dashes)
 
+        #reassigns for each loop through if more than one
         timeStamps = []
         opens = []
         highs = []
