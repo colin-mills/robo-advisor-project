@@ -1,5 +1,8 @@
-from app.functions import to_USD, compile_URL, os
+from app.functions import to_USD, compile_URL, os, get_response
 from dotenv import load_dotenv
+
+load_dotenv()
+API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 
 def test_to_USD():
     assert to_USD(4) == "$4.00" #should have two decimal points
@@ -9,8 +12,12 @@ def test_to_USD():
     assert to_USD(8.00000000001) == "$8.00" #Should round down
 
 def test_compile_URL():
-    load_dotenv()
-    API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AMZN&apikey={}".format(API_KEY)
-    
     assert compile_URL("AMZN") == request_url
+
+def test_get_response():
+     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AMZN&apikey={}".format(API_KEY)
+     response = get_response(request_url)
+     response = list(response)
+     assert response[0] == "Meta Data"
+     assert response[1] == "Time Series (Daily)"

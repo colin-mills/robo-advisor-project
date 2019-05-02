@@ -1,13 +1,11 @@
 #robo_advisor.py
-import json
-import requests
 import datetime
 import statistics
 from pandas import DataFrame
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from functions import to_USD, compile_URL, os
+from functions import to_USD, compile_URL, os, requests, get_response
 
 #Variable definitions
 dashes = "---------------------------------------------"
@@ -37,19 +35,11 @@ while Ticker != 'DONE':
         firstMessage = True
 
 for stockTicker in stockList:
-    #request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&apikey={}".format(stockTicker, API_KEY)
-    #print(request_url)
     request_url = compile_URL(stockTicker)
 
-    #Try block for invalid call
-    try:
-        #requests the info at the URL
-        print(dashes)
-        response = requests.get(request_url)
-        print("RESPONSE STATUS: " + str(response.status_code))
-
-        #parses this data from json to dict
-        parsed_response = json.loads(response.text)
+    try: #Try block for invalid call
+        ##requests and parses the info at the URL
+        parsed_response = get_response(request_url)
         
         #The Time Series (Daily) dict of the larger dict
         tsd = parsed_response["Time Series (Daily)"] #> 'dict'

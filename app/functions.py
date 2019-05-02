@@ -1,6 +1,8 @@
 #Functions for robo app
 from dotenv import load_dotenv
 import os
+import json
+import requests
 
 def to_USD(Number):
     Number = float(Number)
@@ -12,3 +14,11 @@ def compile_URL(stockTicker):
     API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&apikey={}".format(stockTicker, API_KEY)
     return request_url
+
+def get_response(request_url):
+    #issues request
+    response = requests.get(request_url)
+    #parses this data from json to dict
+    
+    parsed_response = json.loads(response.text)
+    return parsed_response
